@@ -1,11 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export const Sort = () => {
-  const sortMap = ['популярности', 'цене', 'алфавиту'];
+export const Sort = ({ value, setValue }) => {
+  const sortMap = [
+    { name: 'популярности (DESC)', sortProperty: 'rating' },
+    { name: 'популярности (ASK)', sortProperty: '-rating' },
+    { name: 'цене (DESC)', sortProperty: 'price' },
+    { name: 'цене (ASK)', sortProperty: '-price' },
+    { name: 'алфавиту (DESC)', sortProperty: 'title' },
+    { name: 'алфавиту (ASK)', sortProperty: '-title' },
+  ];
   const [isVisible, setVisible] = React.useState(false);
-  const [activeSort, setActiveSort] = React.useState(sortMap[0]);
 
-  const openPopup = () => {
+  const changeSort = (obj) => {
+    setValue(obj);
     setVisible(!isVisible);
   };
 
@@ -24,17 +32,17 @@ export const Sort = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => openPopup()}>{activeSort}</span>
+        <span onClick={() => setVisible(!isVisible)}>{value.name}</span>
       </div>
       {isVisible && (
         <div className="sort__popup">
           <ul>
-            {sortMap.map((item, index) => (
+            {sortMap.map((obj, index) => (
               <li
                 key={index}
-                onClick={() => setActiveSort(item)}
-                className={item === activeSort ? 'active' : ''}>
-                {item}
+                onClick={() => changeSort(obj)}
+                className={obj.sortProperty === value.sortProperty ? 'active' : ''}>
+                {obj.name}
               </li>
             ))}
           </ul>
@@ -42,4 +50,9 @@ export const Sort = () => {
       )}
     </div>
   );
+};
+
+Sort.propTypes = {
+  value: PropTypes.object,
+  setValue: PropTypes.func,
 };

@@ -1,12 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-export const Categories = () => {
-  const [activeIndex, setActiveIndex] = React.useState(0);
-
+export const Categories = ({ value, setValue }) => {
   const changeActiveCat = (index) => {
-    setActiveIndex(index);
+    setValue(index);
   };
 
   return (
@@ -17,7 +16,7 @@ export const Categories = () => {
             <li
               key={item}
               onClick={() => changeActiveCat(index)}
-              className={index === activeIndex ? 'active' : ''}>
+              className={index === value ? 'active' : ''}>
               {item}
             </li>
           );
@@ -25,4 +24,9 @@ export const Categories = () => {
       </ul>
     </div>
   );
+};
+
+Categories.propTypes = {
+  value: PropTypes.number,
+  setValue: PropTypes.func,
 };
