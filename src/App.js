@@ -9,6 +9,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Cart from './pages/Cart';
 
+export const SearchContext = React.createContext();
 // eslint-disable-next-line space-before-function-paren
 function App() {
   const [searchvalue, setSearchValue] = React.useState('');
@@ -16,14 +17,16 @@ function App() {
   return (
     <div className="App">
       <div className="wrapper">
-        <Header searchvalue={searchvalue} setSearchValue={setSearchValue} />
-        <div className="content">
-          <Routes>
-            <Route path="/" element={<Home searchvalue={searchvalue} />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="*" element={<NotFoundBlock />} />
-          </Routes>
-        </div>
+        <SearchContext.Provider value={{ searchvalue, setSearchValue }}>
+          <Header />
+          <div className="content">
+            <Routes>
+              <Route path="/" element={<Home searchvalue={searchvalue} />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="*" element={<NotFoundBlock />} />
+            </Routes>
+          </div>
+        </SearchContext.Provider>
       </div>
     </div>
   );
