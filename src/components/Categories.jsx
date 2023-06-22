@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 
 const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-export const Categories = ({ value, setValue }) => {
-  const changeActiveCat = (index) => {
-    setValue(index);
-  };
-
+export const Categories = ({ value, onChange }) => {
   return (
     <div className="categories">
       <ul>
@@ -15,7 +11,7 @@ export const Categories = ({ value, setValue }) => {
           return (
             <li
               key={item}
-              onClick={() => changeActiveCat(index)}
+              onClick={() => onChange(index)}
               className={index === value ? 'active' : ''}>
               {item}
             </li>
@@ -28,5 +24,5 @@ export const Categories = ({ value, setValue }) => {
 
 Categories.propTypes = {
   value: PropTypes.number,
-  setValue: PropTypes.func,
+  onChange: PropTypes.func,
 };

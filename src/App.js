@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Header } from './components/Header';
-// import Home from './pages/Home';
 
 import './scss/app.scss';
 import NotFoundBlock from './components/NotFoundBlock';

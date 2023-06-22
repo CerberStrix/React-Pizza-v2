@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeCategoryId, changeSortType } from '../redux/slices/filterSlice.js';
 import PropTypes from 'prop-types';
 import { SearchContext } from '../App';
 
@@ -9,26 +11,31 @@ import Skeleton from '../components/Pizzablock/Skeleton';
 import Pagination from '../components/Pagination';
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const { categoryId, sort } = useSelector((state) => state.filters);
   const { searchvalue } = React.useContext(SearchContext);
   const [pizzas, setPizzas] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [categoryId, setCategoryId] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [sortTypeObj, setSortType] = React.useState({
-    name: 'популярности',
-    sortProperty: 'rating',
-  });
 
   const filteredPizzas = pizzas
     .filter((items) => items.title.toLowerCase().includes(searchvalue.toLowerCase()))
     .map((obj, i) => <PizzaBlock key={i} {...obj} />);
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
 
+  const onChangeCategory = (id) => {
+    dispatch(changeCategoryId(id));
+  };
+
+  const onChangeSort = (obj) => {
+    dispatch(changeSortType(obj));
+  };
+
   React.useEffect(() => {
     setIsLoading(true);
 
-    const order = sortTypeObj.sortProperty.includes('-') ? 'ask' : 'desc';
-    const sortBy = sortTypeObj.sortProperty.replace('-', '');
+    const order = sort.sortProperty.includes('-') ? 'ask' : 'desc';
+    const sortBy = sort.sortProperty.replace('-', '');
     const category = categoryId > 0 ? `category=${categoryId}` : '';
 
     fetch(
@@ -41,13 +48,13 @@ const Home = () => {
       });
 
     window.scrollTo(0, 0);
-  }, [categoryId, sortTypeObj, currentPage]);
+  }, [categoryId, sort, currentPage]);
 
   return (
     <div className="container">
       <div className="content__top">
-        <Categories value={categoryId} setValue={setCategoryId} />
-        <Sort value={sortTypeObj} setValue={setSortType} />
+        <Categories value={categoryId} onChange={onChangeCategory} />
+        <Sort value={sort} onChange={onChangeSort} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
 

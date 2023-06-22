@@ -1,19 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export const Sort = ({ value, setValue }) => {
-  const sortMap = [
-    { name: 'популярности (DESC)', sortProperty: 'rating' },
-    { name: 'популярности (ASK)', sortProperty: '-rating' },
-    { name: 'цене (DESC)', sortProperty: 'price' },
-    { name: 'цене (ASK)', sortProperty: '-price' },
-    { name: 'алфавиту (DESC)', sortProperty: 'title' },
-    { name: 'алфавиту (ASK)', sortProperty: '-title' },
-  ];
+const sortMap = [
+  { name: 'популярности (DESC)', sortProperty: 'rating' },
+  { name: 'популярности (ASK)', sortProperty: '-rating' },
+  { name: 'цене (DESC)', sortProperty: 'price' },
+  { name: 'цене (ASK)', sortProperty: '-price' },
+  { name: 'алфавиту (DESC)', sortProperty: 'title' },
+  { name: 'алфавиту (ASK)', sortProperty: '-title' },
+];
+
+export const Sort = ({ value, onChange }) => {
   const [isVisible, setVisible] = React.useState(false);
 
   const changeSort = (obj) => {
-    setValue(obj);
+    onChange(obj);
     setVisible(!isVisible);
   };
 
@@ -54,5 +55,5 @@ export const Sort = ({ value, setValue }) => {
 
 Sort.propTypes = {
   value: PropTypes.object,
-  setValue: PropTypes.func,
+  onChange: PropTypes.func,
 };
