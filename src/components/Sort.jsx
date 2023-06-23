@@ -18,6 +18,9 @@ export const Sort = ({ value, onChange }) => {
     setVisible(!isVisible);
   };
 
+  const name = sortMap.filter((obj) => obj.sortProperty === value.sortProperty).pop().name;
+  console.log(name);
+
   return (
     <div className="sort">
       <div className="sort__label">
@@ -33,7 +36,7 @@ export const Sort = ({ value, onChange }) => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setVisible(!isVisible)}>{value.name}</span>
+        <span onClick={() => setVisible(!isVisible)}>{name}</span>
       </div>
       {isVisible && (
         <div className="sort__popup">
