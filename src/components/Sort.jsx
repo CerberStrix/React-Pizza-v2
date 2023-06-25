@@ -11,6 +11,7 @@ const sortMap = [
 ];
 
 export const Sort = ({ value, onChange }) => {
+  const sortRef = React.useRef();
   const [isVisible, setVisible] = React.useState(false);
 
   const changeSort = (obj) => {
@@ -19,10 +20,21 @@ export const Sort = ({ value, onChange }) => {
   };
 
   const name = sortMap.filter((obj) => obj.sortProperty === value.sortProperty).pop().name;
-  console.log(name);
+
+  React.useEffect(() => {
+    const handleOutsideClick = (e) => {
+      const path = e.path || (e.composedPath && e.composedPath());
+      if (!path.includes(sortRef.current)) {
+        setVisible(false);
+      }
+    };
+    document.body.addEventListener('click', handleOutsideClick);
+
+    return () => document.body.removeEventListener('click', handleOutsideClick);
+  }, []);
 
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
