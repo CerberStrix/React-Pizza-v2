@@ -41,6 +41,8 @@ export const pizzasSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
+
+export const pizzasSelector = (state) => state.pizzas;
 export const { setItems } = pizzasSlice.actions;
 
 export default pizzasSlice.reducer;
