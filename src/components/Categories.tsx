@@ -1,9 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+interface CategoriesProps {
+  value: number
+  onChange: any
+}
 
 const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-export const Categories = ({ value, onChange }) => {
+export const Categories: React.FC<CategoriesProps> = ({ value, onChange }) => {
   return (
     <div className="categories">
       <ul>
@@ -20,9 +24,4 @@ export const Categories = ({ value, onChange }) => {
       </ul>
     </div>
   );
-};
-
-Categories.propTypes = {
-  value: PropTypes.number,
-  onChange: PropTypes.func,
 };

@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate';
-import PropTypes from 'prop-types';
 
 import styles from './Pagination.module.scss';
 
-const Pagination = ({ currentPage, onChangePage }) => {
+interface PaginationProps {
+  currentPage: number
+  onChangePage: any
+}
+
+const Pagination: React.FC<PaginationProps> = ({ currentPage, onChangePage }) => {
   return (
     <ReactPaginate
       className={styles.root}
@@ -18,11 +22,6 @@ const Pagination = ({ currentPage, onChangePage }) => {
       renderOnZeroPageCount={null}
     />
   );
-};
-
-Pagination.propTypes = {
-  onChangePage: PropTypes.func,
-  currentPage: PropTypes.number,
 };
 
 export default Pagination;

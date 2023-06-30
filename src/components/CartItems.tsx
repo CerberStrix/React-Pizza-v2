@@ -1,20 +1,29 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { addItem, removeItem, minusItem } from '../redux/slices/cartSlice';
 
-const CartItems = ({ id, title, price, imageUrl, size, type, count }) => {
+interface CartItemsProps {
+  id: string
+  title: string
+  type: string
+  size: number
+  price: number
+  imageUrl: string
+  count: number
+}
+
+const CartItems: React.FC<CartItemsProps> = ({ id, title, price, imageUrl, size, type, count }) => {
   const dispatch = useDispatch();
 
-  const handleClickPlus = () => {
+  const handleClickPlus = (): void => {
     dispatch(addItem({ id }));
   };
 
-  const handleClickMinus = () => {
+  const handleClickMinus = (): void => {
     dispatch(minusItem(id));
   };
 
-  const handleClearItems = () => {
+  const handleClearItems = (): void => {
     dispatch(removeItem(id));
   };
 
@@ -94,16 +103,6 @@ const CartItems = ({ id, title, price, imageUrl, size, type, count }) => {
       </div>
     </div>
   );
-};
-
-CartItems.propTypes = {
-  id: PropTypes.number,
-  title: PropTypes.string,
-  price: PropTypes.number,
-  imageUrl: PropTypes.string,
-  size: PropTypes.number,
-  type: PropTypes.string,
-  count: PropTypes.number,
 };
 
 export default CartItems;

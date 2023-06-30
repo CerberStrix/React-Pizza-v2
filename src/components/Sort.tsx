@@ -1,36 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeSortType, filterSelector } from '../redux/slices/filterSlice';
 
-const sortMap = [
+interface SortItem {
+  name?: string
+  sortProperty?: string
+}
+
+const sortMap: SortItem[] = [
   { name: 'популярности (DESC)', sortProperty: 'rating' },
   { name: 'популярности (ASK)', sortProperty: '-rating' },
   { name: 'цене (DESC)', sortProperty: 'price' },
   { name: 'цене (ASK)', sortProperty: '-price' },
   { name: 'алфавиту (DESC)', sortProperty: 'title' },
-  { name: 'алфавиту (ASK)', sortProperty: '-title' },
+  { name: 'алфавиту (ASK)', sortProperty: '-title' }
 ];
 
-export const Sort = ({ value, onChange }) => {
-  const sortRef = React.useRef();
+export const Sort: React.FC = () => {
+  const dispatch = useDispatch();
+  const { sort } = useSelector(filterSelector);
+  const sortRef = React.useRef<HTMLDivElement>(null);
   const [isVisible, setVisible] = React.useState(false);
 
-  const changeSort = (obj) => {
-    onChange(obj);
+  const changeSort = (obj: SortItem): void => {
+    dispatch(changeSortType(obj));
     setVisible(!isVisible);
+    console.log(isVisible);
   };
 
-  const name = sortMap.filter((obj) => obj.sortProperty === value.sortProperty).pop().name;
+  const names = sortMap.find((obj: SortItem) => obj.sortProperty === sort.sortProperty);
+  const name = names?.name;
 
   React.useEffect(() => {
-    const handleOutsideClick = (e) => {
-      const path = e.path || (e.composedPath && e.composedPath());
-      if (!path.includes(sortRef.current)) {
+    const handleOutsideClick = (e: any): void => {
+      const path = e.composedPath();
+      if (path.includes(sortRef.current) === false) {
         setVisible(false);
       }
     };
     document.body.addEventListener('click', handleOutsideClick);
 
-    return () => document.body.removeEventListener('click', handleOutsideClick);
+    return () => { document.body.removeEventListener('click', handleOutsideClick); };
   }, []);
 
   return (
@@ -48,7 +59,7 @@ export const Sort = ({ value, onChange }) => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setVisible(!isVisible)}>{name}</span>
+        <span onClick={() => { setVisible(!isVisible); }}>{name}</span>
       </div>
       {isVisible && (
         <div className="sort__popup">
@@ -56,8 +67,8 @@ export const Sort = ({ value, onChange }) => {
             {sortMap.map((obj, index) => (
               <li
                 key={index}
-                onClick={() => changeSort(obj)}
-                className={obj.sortProperty === value.sortProperty ? 'active' : ''}>
+                onClick={() => { changeSort(obj); }}
+                className={obj.sortProperty === sort.sortProperty ? 'active' : ''}>
                 {obj.name}
               </li>
             ))}
@@ -70,5 +81,5 @@ export const Sort = ({ value, onChange }) => {
 
 Sort.propTypes = {
   value: PropTypes.object,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func
 };

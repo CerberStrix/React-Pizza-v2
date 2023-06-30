@@ -5,26 +5,26 @@ import { useDispatch } from 'react-redux';
 import { setSearch } from '../../redux/slices/filterSlice';
 import styles from './Search.module.scss';
 
-const Search = () => {
+const Search: React.FC = () => {
   const dispatch = useDispatch();
   const [currentValue, setValue] = React.useState('');
 
-  const inputRef = React.useRef(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const onClickClear = () => {
+  const onClickClear = (): void => {
     dispatch(setSearch(''));
     setValue('');
-    inputRef.current.focus();
+    inputRef.current?.focus();
   };
 
   const updateSearchValue = React.useCallback(
     debounce((str) => {
       dispatch(setSearch(str));
     }, 750),
-    [],
+    []
   );
 
-  const onChangeInput = (value) => {
+  const onChangeInput = (value: React.SetStateAction<string>): void => {
     setValue(value);
     updateSearchValue(value);
   };
@@ -43,7 +43,7 @@ const Search = () => {
             fill: 'none',
             stroke: '#000',
             strokeMiterlimit: '10',
-            strokeWidth: '32px',
+            strokeWidth: '32px'
           }}
         />
         <line
@@ -51,7 +51,7 @@ const Search = () => {
             fill: 'none',
             stroke: '#000',
             strokeMiterlimit: '10',
-            strokeWidth: '32px',
+            strokeWidth: '32px'
           }}
           x1="338.29"
           x2="448"
@@ -62,13 +62,13 @@ const Search = () => {
       <input
         ref={inputRef}
         value={currentValue}
-        onChange={(event) => onChangeInput(event.target.value)}
+        onChange={(event) => { onChangeInput(event.target.value); }}
         className={styles.input}
         placeholder="Поиск пиццы..."
       />
-      {currentValue && (
+      {(currentValue !== null) && (
         <svg
-          onClick={() => onClickClear()}
+          onClick={() => { onClickClear(); }}
           className={styles.clearIcon}
           height="48"
           viewBox="0 0 48 48"
@@ -84,7 +84,7 @@ const Search = () => {
 
 Search.propTypes = {
   searchvalue: PropTypes.string,
-  setSearchValue: PropTypes.func,
+  setSearchValue: PropTypes.func
 };
 
 export default Search;

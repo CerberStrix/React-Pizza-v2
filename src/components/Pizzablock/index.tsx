@@ -1,27 +1,37 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { addItem, cartSelectorById } from '../../redux/slices/cartSlice';
+import { Link } from 'react-router-dom';
 
 const typesNames = ['тонкое', 'традиционное'];
 
-const PizzaBlock = ({ id, title, price, imageUrl, sizes, types }) => {
+interface PizzasProps {
+  id: number
+  title: string
+  price: number
+  imageUrl: string
+  sizes: number[]
+  types: number[]
+}
+
+const PizzaBlock: React.FC<PizzasProps> = ({ id, title, price, imageUrl, sizes, types }) => {
   const dispatch = useDispatch();
 
   const [activeType, setActiveType] = React.useState(0);
   const [activeSize, setActiveSize] = React.useState(0);
 
   const cartItem = useSelector(cartSelectorById(id));
+  const isAdded: boolean = cartItem !== undefined;
 
-  const onClickAdd = () => {
+  const onClickAdd = (): void => {
     const item = {
       id,
       title,
       price,
       imageUrl,
       type: typesNames[activeType],
-      size: sizes[activeSize],
+      size: sizes[activeSize]
     };
     dispatch(addItem(item));
   };
@@ -29,13 +39,15 @@ const PizzaBlock = ({ id, title, price, imageUrl, sizes, types }) => {
   return (
     <div className="pizza-block-wrapper">
       <div className="pizza-block">
-        <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+        <Link to={`/pizza/${id}`}>
+          <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+        </Link>
         <h4 className="pizza-block__title">{title}</h4>
         <div className="pizza-block__selector">
           <ul>
             {types.map((item) => (
               <li
-                onClick={() => setActiveType(item)}
+                onClick={() => { setActiveType(item); }}
                 key={item}
                 className={activeType === item ? 'active' : ''}>
                 {typesNames[item]}
@@ -46,7 +58,7 @@ const PizzaBlock = ({ id, title, price, imageUrl, sizes, types }) => {
             {sizes.map((item, index) => (
               <li
                 key={index}
-                onClick={() => setActiveSize(index)}
+                onClick={() => { setActiveSize(index); }}
                 className={activeSize === index ? 'active' : ''}>
                 {item} см.
               </li>
@@ -68,21 +80,12 @@ const PizzaBlock = ({ id, title, price, imageUrl, sizes, types }) => {
               />
             </svg>
             <span>Добавить</span>
-            {cartItem && <i>{cartItem.count}</i>}
+            {isAdded && <i>{cartItem.count}</i>}
           </button>
         </div>
       </div>
     </div>
   );
-};
-
-PizzaBlock.propTypes = {
-  id: PropTypes.number,
-  title: PropTypes.string,
-  price: PropTypes.number,
-  imageUrl: PropTypes.string,
-  sizes: PropTypes.array,
-  types: PropTypes.array,
 };
 
 export default PizzaBlock;
