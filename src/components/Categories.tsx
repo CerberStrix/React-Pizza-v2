@@ -1,13 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
+import { useWhyDidYouUpdate } from 'ahooks';
 
 interface CategoriesProps {
   value: number
-  onChange: any
+  onChange: (i: number) => void
 }
 
-const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
+export const categories = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-export const Categories: React.FC<CategoriesProps> = ({ value, onChange }) => {
+export const Categories: React.FC<CategoriesProps> = React.memo(({ value, onChange }) => {
+  useWhyDidYouUpdate('Categories', { value, onChange });
+
   return (
     <div className="categories">
       <ul>
@@ -15,7 +20,7 @@ export const Categories: React.FC<CategoriesProps> = ({ value, onChange }) => {
           return (
             <li
               key={item}
-              onClick={() => onChange(index)}
+              onClick={() => { onChange(index); }}
               className={index === value ? 'active' : ''}>
               {item}
             </li>
@@ -24,4 +29,11 @@ export const Categories: React.FC<CategoriesProps> = ({ value, onChange }) => {
       </ul>
     </div>
   );
+});
+
+Categories.propTypes = {
+  value: PropTypes.any,
+  onChange: PropTypes.any
 };
+
+Categories.displayName = 'Categories';

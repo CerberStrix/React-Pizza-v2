@@ -1,15 +1,15 @@
 /* eslint-disable multiline-ternary */
 import React from 'react';
 import qs from 'qs';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   changeCategoryId,
   changePageCount,
   setFilters,
-  filterSelector,
-} from '../redux/slices/filterSlice.js';
-import { fetchPizzas, pizzasSelector } from '../redux/slices/pizzasSlice.js';
+  filterSelector
+} from '../redux/slices/filterSlice';
+import { fetchPizzas, pizzasSelector } from '../redux/slices/pizzasSlice';
 import PropTypes from 'prop-types';
 
 import { Categories } from '../components/Categories';
@@ -17,9 +17,10 @@ import PizzaBlock from '../components/Pizzablock/index';
 import { Sort } from '../components/Sort';
 import Skeleton from '../components/Pizzablock/Skeleton';
 import Pagination from '../components/Pagination/index';
+import { useAppDispatch } from '../redux/store';
 
 const Home: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
@@ -28,15 +29,14 @@ const Home: React.FC = () => {
 
   const filteredPizzas = items
     .filter((items: any) => items.title.toLowerCase().includes(searchValue.toLowerCase()))
-    .map((obj: object, i: number) => <PizzaBlock id={0} title={''} price={0} imageUrl={''} sizes={[]} types={[]} key={i} {...obj} />);
+    .map((obj: object, i: number) => <PizzaBlock id={''} count={0} title={''} price={0} imageUrl={''} sizes={[]} types={[]} key={i} {...obj} />);
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
 
   const getPizzas = async (): Promise<void> => {
     const order = sort.sortProperty.includes('-') ? 'ask' : 'desc';
     const sortBy = sort.sortProperty.replace('-', '');
-    const category = categoryId > 0 ? `category=${categoryId}` : '';
-    dispatch(
-      // @ts-ignore
+    const category = categoryId > 0 ? `category=${String(categoryId)}` : '';
+    void dispatch(
       fetchPizzas({
         order,
         sortBy,
@@ -46,9 +46,9 @@ const Home: React.FC = () => {
     );
   };
 
-  const onChangeCategory = (id: number): void => {
+  const onChangeCategory = React.useCallback((id: number): void => {
     dispatch(changeCategoryId(id));
-  };
+  }, []);
 
   const onPageChange = (count: number): void => {
     dispatch(changePageCount(count));

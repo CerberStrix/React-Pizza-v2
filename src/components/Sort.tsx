@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeSortType, filterSelector } from '../redux/slices/filterSlice';
 
 interface SortItem {
-  name?: string
-  sortProperty?: string
+  name: string
+  sortProperty: string
 }
 
 const sortMap: SortItem[] = [
@@ -24,7 +24,10 @@ export const Sort: React.FC = () => {
   const [isVisible, setVisible] = React.useState(false);
 
   const changeSort = (obj: SortItem): void => {
-    dispatch(changeSortType(obj));
+    const sort = {
+      sortProperty: obj.sortProperty
+    };
+    dispatch(changeSortType(sort));
     setVisible(!isVisible);
     console.log(isVisible);
   };
@@ -33,9 +36,9 @@ export const Sort: React.FC = () => {
   const name = names?.name;
 
   React.useEffect(() => {
-    const handleOutsideClick = (e: any): void => {
+    const handleOutsideClick = (e: MouseEvent): void => {
       const path = e.composedPath();
-      if (path.includes(sortRef.current) === false) {
+      if (sortRef.current !== null && !path.includes(sortRef.current)) {
         setVisible(false);
       }
     };

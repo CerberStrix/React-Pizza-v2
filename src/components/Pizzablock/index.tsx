@@ -1,37 +1,39 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addItem, cartSelectorById } from '../../redux/slices/cartSlice';
+import { type CartItem, addItem, cartSelectorById } from '../../redux/slices/cartSlice';
 import { Link } from 'react-router-dom';
 
 const typesNames = ['тонкое', 'традиционное'];
 
 interface PizzasProps {
-  id: number
+  id: string
   title: string
   price: number
   imageUrl: string
   sizes: number[]
   types: number[]
+  count: number
 }
 
-const PizzaBlock: React.FC<PizzasProps> = ({ id, title, price, imageUrl, sizes, types }) => {
+const PizzaBlock: React.FC<PizzasProps> = ({ id, title, price, imageUrl, sizes, types, count }) => {
   const dispatch = useDispatch();
 
   const [activeType, setActiveType] = React.useState(0);
   const [activeSize, setActiveSize] = React.useState(0);
 
-  const cartItem = useSelector(cartSelectorById(id));
+  const cartItem = useSelector(cartSelectorById(Number(id)));
   const isAdded: boolean = cartItem !== undefined;
 
   const onClickAdd = (): void => {
-    const item = {
+    const item: CartItem = {
       id,
       title,
       price,
       imageUrl,
       type: typesNames[activeType],
-      size: sizes[activeSize]
+      size: sizes[activeSize],
+      count: 0
     };
     dispatch(addItem(item));
   };
@@ -80,7 +82,7 @@ const PizzaBlock: React.FC<PizzasProps> = ({ id, title, price, imageUrl, sizes, 
               />
             </svg>
             <span>Добавить</span>
-            {isAdded && <i>{cartItem.count}</i>}
+            {isAdded && <i>{cartItem?.count}</i>}
           </button>
         </div>
       </div>

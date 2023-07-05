@@ -14,7 +14,7 @@ const Cart: React.FC = () => {
     dispatch(clearItems());
   };
 
-  if (totalPrice === undefined) {
+  if (totalPrice === 0) {
     return <CartEmpty />;
   }
 

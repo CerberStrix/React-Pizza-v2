@@ -23,7 +23,7 @@ export const Header: React.FC = () => {
             </div>
           </div>
         </Link>
-        <Search />
+        {pathname !== '/cart' && <Search />}
         {pathname !== '/cart' && (
           <div className="header__cart">
             <Link to="/cart" className="button button--cart">

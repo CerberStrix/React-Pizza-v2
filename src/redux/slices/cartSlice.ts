@@ -1,46 +1,63 @@
-import { createSlice, isAnyOf } from '@reduxjs/toolkit';
+import { type PayloadAction, createSlice, isAnyOf } from '@reduxjs/toolkit';
+import { type RootState } from '../store';
 
-const initialState = {
+export interface CartItem {
+  id: string
+  title: string
+  price: number
+  imageUrl: string
+  type: string
+  size: number
+  count: number
+};
+
+interface CartSliceState {
+  totalPrice: number
+  totalCount: number
+  items: CartItem[]
+}
+
+const initialState: CartSliceState = {
   items: [],
   totalPrice: 0,
-  totalCount: 0,
+  totalCount: 0
 };
 
 export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addItem: (state, action) => {
+    addItem: (state, action: PayloadAction<CartItem>) => {
       const findItem = state.items.find((obj) => obj.id === action.payload.id);
 
-      if (findItem) {
+      if (findItem !== undefined) {
         findItem.count++;
       } else {
         state.items.push({
           ...action.payload,
-          count: 1,
+          count: 1
         });
       }
     },
-    minusItem: (state, action) => {
+    minusItem: (state, action: PayloadAction<string>) => {
       const findItem = state.items.find((obj) => obj.id === action.payload);
 
-      if (findItem) {
+      if (findItem !== undefined) {
         findItem.count--;
       }
 
-      if (findItem.count === 0) {
+      if (findItem !== undefined && findItem.count === 0) {
         state.items = state.items.filter((item) => item.id !== action.payload);
       }
     },
-    removeItem: (state, action) => {
+    removeItem: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((item) => item.id !== action.payload);
     },
     clearItems: (state) => {
       state.items = [];
       state.totalPrice = 0;
       state.totalCount = 0;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder.addMatcher(isAnyOf(addItem, minusItem, removeItem), (state) => {
@@ -51,11 +68,11 @@ export const cartSlice = createSlice({
         return obj.count + count;
       }, 0);
     });
-  },
+  }
 });
 
-export const cartSelector = (state) => state.cart;
-export const cartSelectorById = (id) => (state) =>
+export const cartSelector = (state: RootState): CartSliceState => state.cart;
+export const cartSelectorById = (id: number) => (state: RootState) =>
   state.cart.items.find((obj) => Number(obj.id) === Number(id));
 
 // Action creators are generated for each case reducer function
