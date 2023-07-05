@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { type CartItem, addItem, cartSelectorById } from '../../redux/slices/cartSlice';
+import { addItem, cartSelectorById } from '../../redux/cart/slice';
+import { type CartItem } from '../../redux/cart/types';
 import { Link } from 'react-router-dom';
 
 const typesNames = ['тонкое', 'традиционное'];

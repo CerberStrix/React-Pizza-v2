@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeSortType, filterSelector } from '../redux/slices/filterSlice';
+import { filterSelector } from '../redux/filter/selectors';
+import { changeSortType } from '../redux/filter/slice';
 
 interface SortItem {
   name: string

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import { useDispatch } from 'react-redux';
-import { setSearch } from '../../redux/slices/filterSlice';
+import { setSearch } from '../../redux/filter/slice';
 import styles from './Search.module.scss';
 
 const Search: React.FC = () => {

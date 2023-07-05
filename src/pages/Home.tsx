@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import {
   changeCategoryId,
   changePageCount,
-  setFilters,
-  filterSelector
-} from '../redux/slices/filterSlice';
-import { fetchPizzas, pizzasSelector } from '../redux/slices/pizzasSlice';
+  setFilters
+} from '../redux/filter/slice';
+import { filterSelector } from '../redux/filter/selectors';
+import { fetchPizzas } from '../redux/pizza/asyncActions';
+import { pizzasSelector } from '../redux/pizza/selectors';
+
 import PropTypes from 'prop-types';
 
 import { Categories } from '../components/Categories';
